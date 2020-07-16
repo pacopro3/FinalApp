@@ -37,6 +37,9 @@ public class supernodo {
         p.setVisible(false);
         p.dispose();
         //Se inicializa la interfaz del supernodo
+        IntSupernodo isn = new IntSupernodo();
+        isn.setVisible(true);
+        isn.setTitle("Supernodo:" + String.valueOf(pto));
     }
     
 }

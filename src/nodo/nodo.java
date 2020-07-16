@@ -37,5 +37,8 @@ public class nodo {
         p.setVisible(false);
         p.dispose();
         //Se inicializa la interfaz del nodo
+        IntNodo in1 = new IntNodo();
+        in1.setVisible(true);
+        in1.setTitle("Nodo:" + String.valueOf(pto));
     }
 }
