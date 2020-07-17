@@ -20,6 +20,7 @@ public class IntNodo extends javax.swing.JFrame {
         initComponents();
         lm1 = new DefaultListModel();
         jList1.setModel(lm1);
+        close = false;
     }
 
     /**
@@ -38,7 +39,12 @@ public class IntNodo extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("Escriba el archivo a buscar:");
 
@@ -101,6 +107,11 @@ public class IntNodo extends javax.swing.JFrame {
         bandera = true;
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        close = true;
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -156,6 +167,10 @@ public class IntNodo extends javax.swing.JFrame {
         lm1.addElement(s);
     }
     
+    public boolean getClose() {
+        return close;
+    }
+    
 //    
 //    public boolean removeList(String s){
 //        String help;
@@ -170,7 +185,7 @@ public class IntNodo extends javax.swing.JFrame {
     public void clearList(){
         lm1.clear();
     }
-    
+    private boolean close;
     private DefaultListModel lm1;
     private boolean bandera;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -181,4 +196,6 @@ public class IntNodo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
+    
 }

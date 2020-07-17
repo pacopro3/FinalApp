@@ -193,6 +193,22 @@ public class IntSupernodo extends javax.swing.JFrame {
         tab.addRow(objs);
     }
     
+    public boolean existTable(String a,String md5, String sn){
+        String col1,col2,col3;
+        for(int i=0;i<tab.getRowCount();i++){
+            col1=(String) tab.getValueAt(i, 0);
+            col2=(String) tab.getValueAt(i, 1);
+            col3 = (String) tab.getValueAt(i, 2);
+            if(col1.equals(a))
+                if(col2.equals(md5))
+                    if(col3.equals(sn)){
+                        return true;
+                    }
+                            
+        }
+        return false;
+    }
+    
     public boolean removeTable(String a,String md5, String sn){
         String col1,col2,col3;
         for(int i=0;i<tab.getRowCount();i++){
