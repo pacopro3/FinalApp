@@ -26,6 +26,7 @@ public class IntSupernodo extends javax.swing.JFrame {
         jList1.setModel(spn1);
         jList2.setModel(nodos);
         jTable1.setModel(tab);
+        close = false;
     }
 
     /**
@@ -47,7 +48,12 @@ public class IntSupernodo extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("Lista de Supernodos");
 
@@ -120,6 +126,11 @@ public class IntSupernodo extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        close = true;
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -225,7 +236,12 @@ public class IntSupernodo extends javax.swing.JFrame {
         }
         return false;
     }
+    
+    public boolean getClose() {
+        return close;
+    }
 
+    private boolean close;
     private DefaultTableModel tab;
     private DefaultListModel spn1;
     private DefaultListModel nodos;
@@ -240,4 +256,6 @@ public class IntSupernodo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    
 }

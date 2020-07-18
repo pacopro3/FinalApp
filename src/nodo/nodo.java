@@ -74,7 +74,7 @@ public class nodo {
         in1.setVisible(true);
         in1.setTitle("Nodo:" + String.valueOf(pto));
         ByteBuffer b = ByteBuffer.allocate(1024);
-        String nuevos = "Nuevo<>" + persona + "<>" + persona;
+        String nuevos = "Nuevo<>N<>" + persona;
         System.out.println("Texto: " + nuevos);
         b = ByteBuffer.wrap(nuevos.getBytes("UTF-8"),0,nuevos.length());
         cl.send(b, remote);
@@ -89,7 +89,7 @@ public class nodo {
                 try {
                 if(in1.getClose()==true){
                     ByteBuffer be = ByteBuffer.allocate(1024);
-                    String fin = "Cierre<>" + persona;
+                    String fin = "Cierre<>N<>" + persona;
                     System.out.println("Texto: " + fin);
                     be = ByteBuffer.wrap(fin.getBytes("UTF-8"),0,fin.length());
                     cl.send(be, remote);

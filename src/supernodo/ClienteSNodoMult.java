@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nodo;
+package supernodo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -18,12 +18,12 @@ import java.util.Iterator;
  *
  * @author Sweet
  */
-public class ClienteNodoMult extends Thread{
+public class ClienteSNodoMult extends Thread{
 
     String persona;
     DatagramChannel cl;
 
-    public ClienteNodoMult(String persona, DatagramChannel cl) {
+    public ClienteSNodoMult(String persona, DatagramChannel cl) {
         this.persona = persona;
         this.cl = cl;
     }
