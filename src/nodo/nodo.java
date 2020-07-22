@@ -16,14 +16,18 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  *
  * @author Sweet
  */
 public class nodo {
+    private final AtomicReference<ArrayList> supernodoasociado=new AtomicReference<>();
+    
     public static void main(String[] args) throws InterruptedException, SocketException {
         int pto=4000;
         String hhost = "228.1.1.10";
