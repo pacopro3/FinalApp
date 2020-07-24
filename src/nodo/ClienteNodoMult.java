@@ -54,7 +54,7 @@ public class ClienteNodoMult extends Thread{
                         converted = converted.trim();
                         String msj[] = converted.split("<>");
                         if(msj[1].equals("SN")){
-                            if(msj[0].equals("Nuevo")){
+                            if(msj[0].equals("Vivo")){
                                 supernodos.add(msj[2]);
                             }else if(msj[0].equals("Cierre")){
                                 supernodos.remove(msj[2]);
@@ -71,9 +71,7 @@ public class ClienteNodoMult extends Thread{
         }
     }
     
-   public void selectNodo(ArrayList <String> a){
-       for(int i=0;i<a.size();i++){
-           //Intenta establecer conexión con el servidor RMI
-       }
+   public void selectNodo(){
+       
    }
 }
