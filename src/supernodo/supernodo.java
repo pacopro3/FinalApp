@@ -79,8 +79,12 @@ public class supernodo {
         b.clear();
         
         Thread cliente = new Thread(new ClienteSNodoMult(persona,cl));
-        cliente.setName("nodo");
+        cliente.setName("supernodocliente");
         cliente.start();
+        
+        Thread server = new Thread(new ServidorSNodoMult(persona,cl,remote));
+        server.setName("supernodoservidor");
+        server.start();
         
         boolean f=true;
             do{
@@ -104,6 +108,7 @@ public class supernodo {
             isn.dispose();
             
             cliente.interrupt();
+            server.interrupt();
             
         }catch (Exception e) {
             e.printStackTrace();

@@ -39,8 +39,7 @@ public class clientenodoRMI extends ConexionRMI {
     private String host;
     private IntNodo in;
     private String MD5;
-    int id;
-    int ptoS;
+    int id,ptoN,ptoS;
     String directorio,a,b;
     Archivo stub;
     ArrayList<objArchivo> array, apoyo;
@@ -51,13 +50,14 @@ public class clientenodoRMI extends ConexionRMI {
         this.host=hhost;
         this.ptoS=pto;
         this.in=in;
+        ptoN=in.getPuerto();
         DataInputStream dis;
         array=new ArrayList<>();
         apoyo=new ArrayList<>();
 	try {
         dis = new DataInputStream(cs.getInputStream());
         id = dis.readInt();
-        System.out.println("El id es: "+ id);
+        System.err.println("PtoN:" + ptoN + "\nID:" + id);
         String current = new java.io.File( "." ).getCanonicalPath();
         directorio = current + "\\src\\Folders\\" + id + "\\";
 	    Registry registry = LocateRegistry.getRegistry(host);	

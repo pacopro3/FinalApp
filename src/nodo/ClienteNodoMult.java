@@ -37,9 +37,8 @@ public class ClienteNodoMult extends Thread{
     public void run() {
         try {
             final Selector selector_read = Selector.open();
+                cl.register(selector_read, SelectionKey.OP_READ);
             ByteBuffer bb;
-            String puertoRMI = persona;
-            cl.register(selector_read, SelectionKey.OP_READ);
             while (true){
                 selector_read.select();
                 Iterator<SelectionKey> iterator = selector_read.selectedKeys().iterator();
@@ -54,6 +53,7 @@ public class ClienteNodoMult extends Thread{
                         converted = converted.trim();
                         String msj[] = converted.split("<>");
                         if(msj[1].equals("SN")){
+                            System.err.println("Entra->" + converted);
                             if(msj[0].equals("Vivo")){
                                 if(!(supernodos.contains(msj[2])))
                                     supernodos.add(msj[2]);

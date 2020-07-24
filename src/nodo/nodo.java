@@ -76,7 +76,7 @@ public class nodo {
         //Se inicializa la interfaz del nodo
         IntNodo in1 = new IntNodo();
         in1.setVisible(true);
-        in1.setTitle("Nodo:" + String.valueOf(pto));
+        in1.setTitle("localhost:" + String.valueOf(pto));
         ByteBuffer b = ByteBuffer.allocate(1024);
         String nuevos = "Nuevo<>N<>" + persona;
         System.out.println("Texto: " + nuevos);

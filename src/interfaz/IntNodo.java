@@ -190,6 +190,10 @@ public class IntNodo extends javax.swing.JFrame {
         lm1.clear();
     }
     
+    public int getPuerto(){
+        String[] a = this.getTitle().split(":");
+        return Integer.parseInt(a[1]);
+    }
     
     private boolean close;
     private DefaultListModel lm1;

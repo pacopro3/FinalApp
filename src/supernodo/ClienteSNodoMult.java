@@ -34,6 +34,7 @@ public class ClienteSNodoMult extends Thread{
     public void run() {
     try {
         final Selector selector_read = Selector.open();
+        cl.register(selector_read, SelectionKey.OP_READ);
         ByteBuffer bb;
         String people = persona;
         cl.register(selector_read, SelectionKey.OP_READ);
