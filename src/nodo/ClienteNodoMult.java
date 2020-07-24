@@ -55,7 +55,8 @@ public class ClienteNodoMult extends Thread{
                         String msj[] = converted.split("<>");
                         if(msj[1].equals("SN")){
                             if(msj[0].equals("Vivo")){
-                                supernodos.add(msj[2]);
+                                if(!(supernodos.contains(msj[2])))
+                                    supernodos.add(msj[2]);
                             }else if(msj[0].equals("Cierre")){
                                 supernodos.remove(msj[2]);
                             }
