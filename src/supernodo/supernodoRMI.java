@@ -18,10 +18,12 @@ import java.util.ArrayList;
  */
 public class supernodoRMI extends ConexionRMI implements Archivo{
     IntSupernodo is;
+    ArrayList<objArchivo> local;
     
     public supernodoRMI(String tipo, int pto, IntSupernodo is) throws IOException {
         super(tipo,pto);
         this.is=is;
+        local = new ArrayList<>();
     }
     
     public void MainServidor(supernodoRMI s) throws IOException {
@@ -57,7 +59,13 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
 
     @Override
     public boolean Actualizar(ArrayList<objArchivo> arreglo) throws RemoteException, Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //se implementa metodo para la actualización de la información que llega del nodo que tenemos anclado
+        try {
+            //Crear codigo para juntar local arraylist con la arraylist nueva que llega y eliminar los que ya no se encuentren en la primera
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
@@ -67,7 +75,8 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
 
     @Override
     public ArrayList<objArchivo> getLocalArchivo() throws RemoteException, Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //damos return del arraylist que tenemos de las variables locales que tenemos 
+        return local;
     }
 
     

@@ -171,6 +171,10 @@ public class IntNodo extends javax.swing.JFrame {
         return close;
     }
     
+    public void LOGS(String s){
+        lm1.addElement(s);
+    }
+    
 //    
 //    public boolean removeList(String s){
 //        String help;
@@ -185,6 +189,8 @@ public class IntNodo extends javax.swing.JFrame {
     public void clearList(){
         lm1.clear();
     }
+    
+    
     private boolean close;
     private DefaultListModel lm1;
     private boolean bandera;
