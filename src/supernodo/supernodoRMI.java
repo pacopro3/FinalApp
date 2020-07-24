@@ -62,6 +62,22 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
         //se implementa metodo para la actualización de la información que llega del nodo que tenemos anclado
         try {
             //Crear codigo para juntar local arraylist con la arraylist nueva que llega y eliminar los que ya no se encuentren en la primera
+            String del;
+            ArrayList<objArchivo> apoyo=new ArrayList<>();
+            objArchivo aux=arreglo.get(0);
+            del=aux.getNodo();
+            for(int i=0;i<local.size();i++){
+                aux=local.get(i);
+                if(!(aux.getNodo().equals(del))){
+                    apoyo.add(aux);
+                }
+            }
+            for(int i=0;i<arreglo.size();i++){
+                apoyo.add(arreglo.get(i));
+            }
+            local.clear();
+            local.addAll(apoyo);
+            apoyo.clear();
             return true;
         } catch (Exception e) {
             return false;
