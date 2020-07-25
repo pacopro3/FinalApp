@@ -28,7 +28,6 @@ public class supernodo {
         InetSocketAddress dir = new InetSocketAddress(pto);
         final SocketAddress remote = new InetSocketAddress(hhost, pto);
         final String persona;
-        String text ="";
         Puerto p = new Puerto();
         p.setVisible(true);
         p.setTitle("Supernodo");
@@ -70,35 +69,42 @@ public class supernodo {
         //Se inicializa la interfaz del supernodo
         IntSupernodo isn = new IntSupernodo();
         isn.setVisible(true);
-        isn.setTitle("Supernodo:" + String.valueOf(pto));
+        isn.setTitle("localhost:" + String.valueOf(pto));
         ByteBuffer b = ByteBuffer.allocate(1024);
         String nuevos = "Nuevo<>SN<>" + persona;
         System.out.println("Texto: " + nuevos);
         b = ByteBuffer.wrap(nuevos.getBytes("UTF-8"),0,nuevos.length());
         cl.send(b, remote);
         b.clear();
-        
-        Thread cliente = new Thread(new ClienteSNodoMult(persona,cl));
+        ClienteSNodoMult csm = new ClienteSNodoMult(persona,cl);
+        Thread cliente = new Thread(csm);
         cliente.setName("supernodocliente");
         cliente.start();
-        
-        Thread server = new Thread(new ServidorSNodoMult(persona,cl,remote));
+        ServidorSNodoMult ssm= new ServidorSNodoMult(persona,cl,remote);
+        Thread server = new Thread(ssm);
         server.setName("supernodoservidor");
         server.start();
+        supernodoRMI serverRMI = new supernodoRMI("server", Integer.parseInt(persona), isn);
+        Thread servrmi = new Thread(serverRMI);
+        //servrmi.start();
         
         boolean f=true;
+        int referencia = ssm.getNumconexiones();
             do{
                 try {
-                if(isn.getClose()==true){
-                    ByteBuffer be = ByteBuffer.allocate(1024);
-                    String fin = "Cierre<>SN<>" + persona;
-                    System.out.println("Texto: " + fin);
-                    be = ByteBuffer.wrap(fin.getBytes("UTF-8"),0,fin.length());
-                    cl.send(be, remote);
-                    be.clear();
-                    f=false;
-                }
-                Thread.sleep(500);
+                    if(serverRMI.getConexiones()!=referencia){
+                        ssm.setNumconexiones(serverRMI.getConexiones());
+                    }
+                    if(isn.getClose()==true){
+                        ByteBuffer be = ByteBuffer.allocate(1024);
+                        String fin = "Cierre<>SN<>" + persona;
+                        System.out.println("Texto: " + fin);
+                        be = ByteBuffer.wrap(fin.getBytes("UTF-8"),0,fin.length());
+                        cl.send(be, remote);
+                        be.clear();
+                        f=false;
+                    }
+                    Thread.sleep(500);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

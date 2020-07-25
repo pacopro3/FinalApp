@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  *
@@ -21,14 +22,15 @@ import java.util.Iterator;
  */
 public class ClienteNodoMult extends Thread{
 
-    String persona;
+    String persona,supernodo;
     DatagramChannel cl;
     ArrayList<String> supernodos;
 
-    public ClienteNodoMult(String persona, DatagramChannel cl) {
+    public ClienteNodoMult(String persona, DatagramChannel cl, String supernodo) {
         this.persona = persona;
         this.cl = cl;
         supernodos = new ArrayList<String>();
+        this.supernodo=supernodo;
     }
     
     
@@ -55,8 +57,12 @@ public class ClienteNodoMult extends Thread{
                         if(msj[1].equals("SN")){
                             System.err.println("Entra->" + converted);
                             if(msj[0].equals("Vivo")){
-                                if(!(supernodos.contains(msj[2])))
-                                    supernodos.add(msj[2]);
+                                int conexiones=Integer.parseInt(msj[3]);
+                                if(conexiones==0){
+                                    if(supernodos.contains(msj[2])) supernodos.remove(msj[2]);
+                                }else{
+                                    if(!(supernodos.contains(msj[2]))) supernodos.add(msj[2]);
+                                }
                             }else if(msj[0].equals("Cierre")){
                                 supernodos.remove(msj[2]);
                             }
@@ -71,8 +77,19 @@ public class ClienteNodoMult extends Thread{
             //Logger.getLogger(ReceiverApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public String getSupernodo() {
+        return supernodo;
+    }
+
+    public void setSupernodo(String supernodo) {
+        this.supernodo = supernodo;
+    }
     
    public void selectNodo(){
-       
+       Random r =  new Random();
+       int result = r.nextInt(supernodos.size());
+       if(result==supernodos.size())result--;
+       supernodo=supernodos.get(result);
    }
 }

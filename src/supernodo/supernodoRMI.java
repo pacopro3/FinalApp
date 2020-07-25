@@ -19,11 +19,13 @@ import java.util.ArrayList;
 public class supernodoRMI extends ConexionRMI implements Archivo{
     IntSupernodo is;
     ArrayList<objArchivo> local;
+    int conexiones;
     
     public supernodoRMI(String tipo, int pto, IntSupernodo is) throws IOException {
         super(tipo,pto);
         this.is=is;
         local = new ArrayList<>();
+        conexiones = 2;
     }
     
     public void MainServidor(supernodoRMI s) throws IOException {
@@ -49,6 +51,7 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
                     System.out.println("Cliente" + idcliente + " en línea");
                     DespachaClientes hilo = new DespachaClientes(cs,idcliente,stub);
                     hilo.start();
+                    setConexiones(getConexiones()-1);
                 }
       }
     
@@ -94,6 +97,16 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
         //damos return del arraylist que tenemos de las variables locales que tenemos 
         return local;
     }
+
+    public int getConexiones() {
+        return conexiones;
+    }
+
+    public void setConexiones(int conexiones) {
+        this.conexiones = conexiones;
+    }
+    
+    
 
     
 }

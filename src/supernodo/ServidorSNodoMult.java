@@ -23,6 +23,7 @@ public class ServidorSNodoMult extends Thread{
     DatagramChannel dc;
     SocketAddress remote;
     int numconexiones;
+    
     public ServidorSNodoMult(String persona,DatagramChannel dc, SocketAddress remote) {
         this.dc=dc;
         this.persona=persona;
@@ -61,7 +62,13 @@ public class ServidorSNodoMult extends Thread{
                     //Logger.getLogger(ReceiverApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
     }
-    
-    
+
+    public int getNumconexiones() {
+        return numconexiones;
+    }
+
+    public void setNumconexiones(int numconexiones) {
+        this.numconexiones = numconexiones;
+    }
     
 }

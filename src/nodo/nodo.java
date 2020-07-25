@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Sweet
  */
 public class nodo {
-    private final AtomicReference<ArrayList> supernodoasociado=new AtomicReference<>();
     
     public static void main(String[] args) throws InterruptedException, SocketException {
         int pto=4000;
@@ -34,11 +33,10 @@ public class nodo {
         InetSocketAddress dir = new InetSocketAddress(pto);
         final SocketAddress remote = new InetSocketAddress(hhost, pto);
         final String persona;
-        String text="";
         Puerto p = new Puerto();
         p.setVisible(true);
         p.setTitle("Nodo");
-        String id;
+        String id="no";
         try {
             Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
             for(NetworkInterface netint:Collections.list(nets)){
@@ -84,13 +82,29 @@ public class nodo {
         cl.send(b, remote);
         b.clear();
         
-        Thread cliente = new Thread(new ClienteNodoMult(persona,cl));
+        //Ejecuta el Thread del cliente multicast
+        ClienteNodoMult cnm=new ClienteNodoMult(persona,cl,id);
+        Thread cliente = new Thread(cnm);
         cliente.setName("nodo");
         cliente.start();
+        
+        Thread.sleep(5000);
+        //se intenta escoger un supernodo
+        cnm.selectNodo();
+        id=cnm.getSupernodo();
+        System.err.println("ID ID ID:" + id);
+        clientenodoRMI rmi = new clientenodoRMI("cliente", Integer.parseInt(id), "localhost", in1);
+        Thread rmiclient = new Thread(rmi);
+        rmiclient.setName("ClienteRMI");
+        rmiclient.start();
         
         boolean f=true;
             do{
                 try {
+                if(in1.getBandera()==true){
+                    System.out.println("Se activa la busqueda");
+                    rmi.buscarArchivo(in1.getText());
+                }
                 if(in1.getClose()==true){
                     ByteBuffer be = ByteBuffer.allocate(1024);
                     String fin = "Cierre<>N<>" + persona;

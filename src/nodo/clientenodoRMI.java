@@ -77,25 +77,24 @@ public class clientenodoRMI extends ConexionRMI {
     @Override
     public void run() {
         try{
-            ArrayList<objArchivo> r = new ArrayList<>();
-            String current = new java.io.File( "." ).getCanonicalPath();
-            directorio = current + "\\src\\Folders\\" + id + "\\";
-            File file = new File(directorio);
-            if (!file.exists()) {
-                file.mkdir();
+            while(true){
+                ArrayList<objArchivo> r = new ArrayList<>();
+                String current = new java.io.File( "." ).getCanonicalPath();
+                directorio = current + "\\src\\Folders\\" + id + "\\";
+                File file = new File(directorio);
+
+                for (final File f : file.listFiles()) {
+                    objArchivo a = new objArchivo();
+                    a.setName(f.getName());
+                    a.setMd5(MD5Checksum.getMD5Checksum(f.getCanonicalPath()));
+                    a.setNodo("Localhost:" + String.valueOf(id));
+                    a.setSupernodo(host + String.valueOf(ptoS));
+                    r.add(a);
+                }
+                if(stub.Actualizar(r))            
+                    in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> Se actualiza la info local en el supernodo");
+                Thread.sleep(5000);
             }
-            
-            for (final File f : file.listFiles()) {
-                objArchivo a = new objArchivo();
-                a.setName(f.getName());
-                a.setMd5(MD5Checksum.getMD5Checksum(f.getCanonicalPath()));
-                a.setNodo("Localhost:" + String.valueOf(id));
-                a.setSupernodo(host + String.valueOf(ptoS));
-                r.add(a);
-            }
-            if(stub.Actualizar(r))            
-                in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> Se actualiza la info local en el supernodo");
-            Thread.sleep(5000);
         }catch(Exception e){
             e.printStackTrace();
         }
