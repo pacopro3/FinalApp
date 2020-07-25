@@ -84,15 +84,18 @@ public class supernodo {
         Thread server = new Thread(ssm);
         server.setName("supernodoservidor");
         server.start();
-        supernodoRMI serverRMI = new supernodoRMI("server", Integer.parseInt(persona), isn);
+        supernodoRMI serverRMI = new supernodoRMI("servidor", Integer.parseInt(persona), isn);
         Thread servrmi = new Thread(serverRMI);
-        //servrmi.start();
+        serverRMI.setSupernodoRMI(serverRMI);
+        servrmi.setName("servidorRMI");
+        //serverRMI.MainServidor(serverRMI);
+        servrmi.start();
         
         boolean f=true;
-        int referencia = ssm.getNumconexiones();
             do{
                 try {
-                    if(serverRMI.getConexiones()!=referencia){
+                    if(serverRMI.getConexiones()!=ssm.getNumconexiones()){
+                        System.err.println("Entro al doble if");
                         ssm.setNumconexiones(serverRMI.getConexiones());
                     }
                     if(isn.getClose()==true){
@@ -115,6 +118,7 @@ public class supernodo {
             
             cliente.interrupt();
             server.interrupt();
+            servrmi.interrupt();
             
         }catch (Exception e) {
             e.printStackTrace();

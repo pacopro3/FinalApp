@@ -8,8 +8,10 @@ import headers.*;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import interfaz.*;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 /**
@@ -20,44 +22,86 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
     IntSupernodo is;
     ArrayList<objArchivo> local;
     int conexiones;
+    supernodoRMI s;
+    int pto;
+    
     
     public supernodoRMI(String tipo, int pto, IntSupernodo is) throws IOException {
         super(tipo,pto);
         this.is=is;
+        this.s=s;
+        this.pto=pto;
         local = new ArrayList<>();
         conexiones = 2;
     }
     
-    public void MainServidor(supernodoRMI s) throws IOException {
-          Archivo stub = null;
+    public void setSupernodoRMI(supernodoRMI s){
+        this.s=s;
+    }
+    public supernodoRMI getSupernodoRMI(){
+        return s;
+    }
+//    public void MainServidor(supernodoRMI s) throws IOException {
+//          Archivo stub = null;
+//          int idcliente;
+//            try {
+//                        //puerto default del rmiregistry
+//                        java.rmi.registry.LocateRegistry.createRegistry(1099); 
+//                        System.out.println("RMI registro listo.");
+//                        stub = (Archivo) UnicastRemoteObject.exportObject(s, 0);
+//            } catch (Exception e) {
+//                        System.out.println("Excepcion RMI del registry:");
+//                        e.printStackTrace();
+//                        System.exit(0);
+//            }//catch
+//                while(true) {
+//                    DataOutputStream dos;            
+//                    System.out.println("Esperando..."); // Esperando conexión
+//                    Socket cs = ss.accept();
+//                    idcliente = cs.getPort();
+//                    dos = new DataOutputStream(cs.getOutputStream());
+//                    dos.writeInt(idcliente);
+//                    System.out.println("Cliente " + idcliente + " en línea");
+//                    DespachaClientes hilo = new DespachaClientes(cs,idcliente,stub);
+//                    hilo.start();
+//                    setConexiones(getConexiones()-1);
+//                }
+//      }
+    
+    @Override
+    public void run(){
+        Archivo stub = null;
           int idcliente;
             try {
                         //puerto default del rmiregistry
-                        java.rmi.registry.LocateRegistry.createRegistry(1099); 
+                        Registry r;
+                        r=java.rmi.registry.LocateRegistry.createRegistry(1099); 
                         System.out.println("RMI registro listo.");
-                        stub = (Archivo) UnicastRemoteObject.exportObject(s, 0);
+                        stub = (Archivo)UnicastRemoteObject.exportObject(s,0);
             } catch (Exception e) {
                         System.out.println("Excepcion RMI del registry:");
                         e.printStackTrace();
                         System.exit(0);
             }//catch
+            try{
                 while(true) {
-                    DataOutputStream dos;            
-                    System.out.println("Esperando..."); // Esperando conexión
-                    Socket cs = ss.accept();
-                    idcliente = cs.getPort();
-                    dos = new DataOutputStream(cs.getOutputStream());
-                    dos.writeInt(idcliente);
-                    System.out.println("Cliente" + idcliente + " en línea");
-                    DespachaClientes hilo = new DespachaClientes(cs,idcliente,stub);
-                    hilo.start();
-                    setConexiones(getConexiones()-1);
-                }
-      }
-    
-    @Override
-    public void run(){
-        
+                            DataOutputStream dos;   
+                            DataInputStream dis;
+                            System.out.println("Esperando..."); // Esperando conexión
+                            Socket cs = ss.accept();
+                            idcliente = cs.getPort();
+                            dis = new DataInputStream(cs.getInputStream());
+                            idcliente = dis.readInt();
+                            System.out.println("Cliente " + idcliente + " en línea");
+                            DespachaClientes hilo = new DespachaClientes(cs,idcliente,stub);
+                            hilo.start();
+                            setConexiones(getConexiones()-1);
+                        }
+            }catch(Exception e){
+                
+            }
+                        
+               
     }
 
     @Override

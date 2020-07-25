@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.rmi.registry.LocateRegistry;
@@ -51,39 +52,45 @@ public class clientenodoRMI extends ConexionRMI {
         this.ptoS=pto;
         this.in=in;
         ptoN=in.getPuerto();
+    }
+
+    public void MainCliente(){
         DataInputStream dis;
-        array=new ArrayList<>();
+        DataOutputStream dos; 
+       array=new ArrayList<>();
         apoyo=new ArrayList<>();
 	try {
-        dis = new DataInputStream(cs.getInputStream());
-        id = dis.readInt();
-        System.err.println("PtoN:" + ptoN + "\nID:" + id);
-        String current = new java.io.File( "." ).getCanonicalPath();
-        directorio = current + "\\src\\Folders\\" + id + "\\";
-	    Registry registry = LocateRegistry.getRegistry(host);	
-            //también puedes usar getRegistry(String host, int port)
-            this.stub = (Archivo) registry.lookup("Archivo" + id);
+            dos = new DataOutputStream(cs.getOutputStream());
+            dos.writeInt(ptoN);
+            
+            System.err.println("PtoN:" + ptoN + "\nID:" + id + "\nhost:" + host);
+            String current = new java.io.File( "." ).getCanonicalPath();
+            directorio = current + "\\src\\Folders\\" + ptoN + "\\";
+	    Registry registry = LocateRegistry.getRegistry();
             File file = new File(directorio);
             if (!file.exists()) {
                 file.mkdir();
             }
+            Thread.sleep(2000);
+            stub = (Archivo)registry.lookup(String.valueOf(ptoN));
+            
         } catch (Exception e) {
             System.err.println("Excepción del cliente: " +
                              e.toString());
             e.printStackTrace();
         }
     }
-
+    
     @Override
     public void run() {
         try{
             while(true){
                 ArrayList<objArchivo> r = new ArrayList<>();
                 String current = new java.io.File( "." ).getCanonicalPath();
-                directorio = current + "\\src\\Folders\\" + id + "\\";
+                directorio = current + "\\src\\Folders\\" + ptoN + "\\";
                 File file = new File(directorio);
 
-                for (final File f : file.listFiles()) {
+                for (final File f : file.listFiles()){
                     objArchivo a = new objArchivo();
                     a.setName(f.getName());
                     a.setMd5(MD5Checksum.getMD5Checksum(f.getCanonicalPath()));

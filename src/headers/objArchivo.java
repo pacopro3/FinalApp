@@ -1,5 +1,7 @@
 package headers;
 
+import java.io.Serializable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,7 +12,7 @@ package headers;
  *
  * @author Sweet
  */
-public class objArchivo {
+public class objArchivo implements Serializable{
     
     String name,md5,supernodo,nodo;
     
@@ -54,6 +56,5 @@ public class objArchivo {
 
     public void setSupernodo(String supernodo) {
         this.supernodo = supernodo;
-    }
-    
+    }    
 }

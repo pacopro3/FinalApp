@@ -88,15 +88,22 @@ public class nodo {
         cliente.setName("nodo");
         cliente.start();
         
-        Thread.sleep(5000);
+        Thread.sleep(4000);
         //se intenta escoger un supernodo
         cnm.selectNodo();
         id=cnm.getSupernodo();
         System.err.println("ID ID ID:" + id);
-        clientenodoRMI rmi = new clientenodoRMI("cliente", Integer.parseInt(id), "localhost", in1);
+        clientenodoRMI rmi = new clientenodoRMI("cliente", Integer.parseInt(id), null, in1);
+        rmi.MainCliente();
         Thread rmiclient = new Thread(rmi);
         rmiclient.setName("ClienteRMI");
         rmiclient.start();
+        //notificamos de la nueva conexión de Nodo a Supernodo
+        String conex = "Conexion<>N<>" + id;
+        System.out.println("Texto: " + conex);
+        b = ByteBuffer.wrap(conex.getBytes("UTF-8"),0,conex.length());
+        cl.send(b, remote);
+        b.clear();
         
         boolean f=true;
             do{
@@ -124,6 +131,7 @@ public class nodo {
             in1.dispose();
             
             cliente.interrupt();
+            rmiclient.interrupt();
             
         }catch (Exception e) {
             e.printStackTrace();

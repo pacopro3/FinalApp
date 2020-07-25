@@ -51,7 +51,7 @@ public class ServidorSNodoMult extends Thread{
                                 texto="Vivo<>SN<>" + persona + "<>" + numconexiones;
                                 bb = ByteBuffer.wrap(texto.getBytes("UTF-8"),0,texto.length());
                                 ch.send(bb, remote);
-                                try{Thread.sleep(5000);}catch(Exception e){e.printStackTrace();continue;}
+                                try{Thread.sleep(5000);}catch(Exception e){e.printStackTrace();System.exit(0);}
                                 continue;  
                             }
                         }
