@@ -112,10 +112,10 @@ public class supernodo {
                         String nuevo=csm.getSNvivo();
                         csm.setSNvivo("");
                         if(!nodos.contains(nuevo)){
-                            nodos.add(nuevo);
                             clientesupernodoRMI cRMI = new clientesupernodoRMI("cliente",Integer.parseInt(nuevo),null,isn);
                             cRMI.MainCliente();
                             cRMI.start();
+                            nodos.add(nuevo);
                             arrayofthreads.add(cRMI);
                             isn.addSupernodos(nuevo);
                         }
@@ -147,7 +147,7 @@ public class supernodo {
                     }
                     Thread.sleep(1000);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    ex.toString();
                 }
             }while(f);
         
