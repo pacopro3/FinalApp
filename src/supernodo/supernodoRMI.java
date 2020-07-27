@@ -108,7 +108,6 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
     public boolean Actualizar(ArrayList<objArchivo> arreglo) throws RemoteException, Exception {
         //se implementa metodo para la actualización de la información que llega del nodo que tenemos anclado
         try {
-            //Crear codigo para juntar local arraylist con la arraylist nueva que llega y eliminar los que ya no se encuentren en la primera
             String del;
             ArrayList<objArchivo> apoyo=new ArrayList<>();
             objArchivo aux=arreglo.get(0);
@@ -133,7 +132,7 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
 
     @Override
     public ArrayList<objArchivo> buscarArchivo(String archivo) throws RemoteException, Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return is.getTable(archivo);
     }
 
     @Override

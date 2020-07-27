@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package supernodo;
+import headers.objArchivo;
 import interfaz.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -13,6 +14,7 @@ import java.net.StandardProtocolFamily;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import nodo.ClienteNodoMult;
@@ -31,8 +33,8 @@ public class supernodo {
         Puerto p = new Puerto();
         p.setVisible(true);
         p.setTitle("Supernodo");
-        String id;
-        
+        ArrayList<String> nodos=new ArrayList<>();
+        ArrayList<clientesupernodoRMI> arrayofthreads = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
             for(NetworkInterface netint:Collections.list(nets)){
@@ -88,16 +90,40 @@ public class supernodo {
         Thread servrmi = new Thread(serverRMI);
         serverRMI.setSupernodoRMI(serverRMI);
         servrmi.setName("servidorRMI");
-        //serverRMI.MainServidor(serverRMI);
         servrmi.start();
         
         boolean f=true;
             do{
                 try {
                     if(serverRMI.getConexiones()!=ssm.getNumconexiones()){
-                        System.err.println("Entro al doble if");
                         ssm.setNumconexiones(serverRMI.getConexiones());
                     }
+                    
+                    if(csm.getSNvivo().length()>0){
+                        String nuevo=csm.getSNvivo();
+                        csm.setSNvivo("");
+                        if(!nodos.contains(nuevo)){
+                            nodos.add(nuevo);
+                            clientesupernodoRMI cRMI = new clientesupernodoRMI("cliente",Integer.parseInt(nuevo),null,isn);
+                            cRMI.MainCliente();
+                            cRMI.start();
+                            arrayofthreads.add(cRMI);
+                            isn.addNodos(nuevo);
+                        }
+                    }
+                    
+                    if(csm.getSNmuerto().length()>0){
+                        String nuevo=csm.getSNmuerto();
+                        csm.setSNmuerto("");
+                        if(nodos.contains(nuevo)){
+                            int hilo=nodos.indexOf(nuevo);
+                            clientesupernodoRMI cRMI = arrayofthreads.get(hilo);
+                            cRMI.interrupt();
+                            arrayofthreads.remove(hilo);
+                            nodos.remove(hilo);
+                        }
+                    }
+                    
                     if(isn.getClose()==true){
                         ByteBuffer be = ByteBuffer.allocate(1024);
                         String fin = "Cierre<>SN<>" + persona;
@@ -107,7 +133,7 @@ public class supernodo {
                         be.clear();
                         f=false;
                     }
-                    Thread.sleep(500);
+                    Thread.sleep(2000);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

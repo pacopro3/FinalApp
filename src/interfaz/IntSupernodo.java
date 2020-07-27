@@ -5,6 +5,8 @@
  */
 package interfaz;
 
+import headers.objArchivo;
+import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,7 +20,8 @@ public class IntSupernodo extends javax.swing.JFrame {
      * Creates new form IntSupernodo
      */
     public IntSupernodo() {
-        String os[] = {"Archivo","MD5","Supernodo"};
+        ar = new ArrayList<>();
+        String os[] = {"Archivo","MD5","Supernodo","Nodo"};
         initComponents();
         spn1 = new DefaultListModel();
         nodos = new DefaultListModel();
@@ -187,7 +190,7 @@ public class IntSupernodo extends javax.swing.JFrame {
         return false;
     }
     
-    public boolean removeNodo(String n){
+    public boolean removeNodo(String n){ 
         String help;
         for(int i=0;i<nodos.getSize();i++){
             help=(String)nodos.get(i);
@@ -199,48 +202,89 @@ public class IntSupernodo extends javax.swing.JFrame {
         return false;
     }
     
-    public void addTable(String a,String md5, String sn){
-        Object[] objs = {a,md5,sn};
+    public void addTable(String a,String md5, String sn,String n){
+        Object[] objs = {a,md5,sn,n};
         tab.addRow(objs);
     }
     
-    public boolean existTable(String a,String md5, String sn){
-        String col1,col2,col3;
+    public boolean existTable(String a,String md5, String sn,String n){
+        String col1,col2,col3,col4;
         for(int i=0;i<tab.getRowCount();i++){
             col1=(String) tab.getValueAt(i, 0);
             col2=(String) tab.getValueAt(i, 1);
-            col3 = (String) tab.getValueAt(i, 2);
+            col3=(String) tab.getValueAt(i, 2);
+            col4=(String) tab.getValueAt(i, 3);
             if(col1.equals(a))
                 if(col2.equals(md5))
-                    if(col3.equals(sn)){
-                        return true;
-                    }
-                            
+                    if(col3.equals(sn))
+                        if(col4.equals(n))
+                            return true;        
         }
         return false;
     }
     
-    public boolean removeTable(String a,String md5, String sn){
-        String col1,col2,col3;
+    public boolean removeTable(String a,String md5, String sn,String n){
+            if(existTable(a,md5,sn,n)){
+                tab.removeRow(getindexTable(a,md5,sn,n));
+                return true;
+            }                  
+        return false;
+    }
+    
+    public int getindexTable(String a, String md5, String sn, String n) {
+        String col1,col2,col3,col4;
         for(int i=0;i<tab.getRowCount();i++){
             col1=(String) tab.getValueAt(i, 0);
             col2=(String) tab.getValueAt(i, 1);
-            col3 = (String) tab.getValueAt(i, 2);
+            col3=(String) tab.getValueAt(i, 2);
+            col4=(String) tab.getValueAt(i, 3);
             if(col1.equals(a))
                 if(col2.equals(md5))
-                    if(col3.equals(sn)){
-                        tab.removeRow(i);
-                        return true;
-                    }
-                            
+                    if(col3.equals(sn))
+                        if(col4.equals(n))
+                            return i;        
         }
-        return false;
+        return -1;
+    }
+    
+    public ArrayList<objArchivo> getTable(String compare){
+        ar.clear();
+        String col1,col2,col3,col4;
+        for(int i=0;i<tab.getRowCount();i++){
+            col1=(String) tab.getValueAt(i, 0);
+            col2=(String) tab.getValueAt(i, 1);
+            col3=(String) tab.getValueAt(i, 2);
+            col4=(String) tab.getValueAt(i, 3);
+            if(compare.equals("")){
+                objArchivo aux = new objArchivo(col1, col2, col3, col4);
+                ar.add(aux);
+            }else if(compare.equals(col1)){
+                objArchivo aux = new objArchivo(col1, col2, col3, col4);
+                ar.add(aux);
+            }       
+        }
+        return ar;
+    }
+    
+    public void removeMasivo(String sn) {
+        String col3;
+        for(int i=0;i<tab.getRowCount();i++){
+            col3=(String) tab.getValueAt(i, 2);
+            if(col3.equals(sn))
+                tab.removeRow(i);
+        }
     }
     
     public boolean getClose() {
         return close;
     }
+    
+    public int getPuerto(){
+        String[] a = this.getTitle().split(":");
+        return Integer.parseInt(a[1]);
+    }
 
+    private ArrayList<objArchivo> ar;
     private boolean close;
     private DefaultTableModel tab;
     private DefaultListModel spn1;
@@ -256,6 +300,8 @@ public class IntSupernodo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    
 
     
 }

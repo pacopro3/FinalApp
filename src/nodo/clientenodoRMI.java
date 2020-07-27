@@ -98,8 +98,9 @@ public class clientenodoRMI extends ConexionRMI {
                     a.setSupernodo(host + String.valueOf(ptoS));
                     r.add(a);
                 }
-                if(stub.Actualizar(r))            
-                    in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> Se actualiza la info local en el supernodo");
+                if(!(r.isEmpty()))
+                    if(stub.Actualizar(r))            
+                        in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> Se actualiza la info local en el supernodo");
                 Thread.sleep(5000);
             }
         }catch(Exception e){
