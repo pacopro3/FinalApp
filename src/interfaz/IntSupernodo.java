@@ -6,9 +6,14 @@
 package interfaz;
 
 import headers.objArchivo;
+import java.awt.List;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -30,6 +35,13 @@ public class IntSupernodo extends javax.swing.JFrame {
         jList2.setModel(nodos);
         jTable1.setModel(tab);
         close = false;
+        sorter = new TableRowSorter<>(jTable1.getModel());
+        jTable1.setRowSorter(sorter);
+        sortKeys = new ArrayList<>();
+        int columnIndexToSort = 1;
+        sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
+        sorter.setSortKeys(sortKeys);
+        sorter.sort();
     }
 
     /**
@@ -170,7 +182,7 @@ public class IntSupernodo extends javax.swing.JFrame {
         });
     }
     
-    public void addSupoernodos(String sp){
+    public void addSupernodos(String sp){
         spn1.addElement(sp);
     }
     
@@ -205,6 +217,7 @@ public class IntSupernodo extends javax.swing.JFrame {
     public void addTable(String a,String md5, String sn,String n){
         Object[] objs = {a,md5,sn,n};
         tab.addRow(objs);
+        jTable1.repaint();
     }
     
     public boolean existTable(String a,String md5, String sn,String n){
@@ -266,11 +279,19 @@ public class IntSupernodo extends javax.swing.JFrame {
         return ar;
     }
     
-    public void removeMasivo(String sn) {
+    public void removeMasivoSN(String sn) {
         String col3;
         for(int i=0;i<tab.getRowCount();i++){
             col3=(String) tab.getValueAt(i, 2);
             if(col3.equals(sn))
+                tab.removeRow(i);
+        }
+    }
+    public void removeMasivoN(String n) {
+        String col4;
+        for(int i=0;i<tab.getRowCount();i++){
+            col4=(String) tab.getValueAt(i, 3);
+            if(col4.equals(n))
                 tab.removeRow(i);
         }
     }
@@ -284,6 +305,8 @@ public class IntSupernodo extends javax.swing.JFrame {
         return Integer.parseInt(a[1]);
     }
 
+    TableRowSorter<TableModel> sorter;
+    ArrayList<RowSorter.SortKey> sortKeys;
     private ArrayList<objArchivo> ar;
     private boolean close;
     private DefaultTableModel tab;

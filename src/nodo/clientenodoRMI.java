@@ -17,17 +17,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import supernodo.Archivo;
 
@@ -62,11 +57,9 @@ public class clientenodoRMI extends ConexionRMI {
 	try {
             dos = new DataOutputStream(cs.getOutputStream());
             dos.writeInt(ptoN);
-            
-            System.err.println("PtoN:" + ptoN + "\nID:" + id + "\nhost:" + host);
             String current = new java.io.File( "." ).getCanonicalPath();
             directorio = current + "\\src\\Folders\\" + ptoN + "\\";
-	    Registry registry = LocateRegistry.getRegistry();
+	    Registry registry = LocateRegistry.getRegistry((55000-ptoS));
             File file = new File(directorio);
             if (!file.exists()) {
                 file.mkdir();
@@ -94,8 +87,8 @@ public class clientenodoRMI extends ConexionRMI {
                     objArchivo a = new objArchivo();
                     a.setName(f.getName());
                     a.setMd5(MD5Checksum.getMD5Checksum(f.getCanonicalPath()));
-                    a.setNodo("Localhost:" + String.valueOf(id));
-                    a.setSupernodo(host + String.valueOf(ptoS));
+                    a.setNodo(String.valueOf(ptoN));
+                    a.setSupernodo(String.valueOf(ptoS));
                     r.add(a);
                 }
                 if(!(r.isEmpty()))
@@ -118,6 +111,7 @@ public class clientenodoRMI extends ConexionRMI {
             array=stub.buscarArchivo(arch);
             if(array.isEmpty()){
                 //print que no se encontró el archivo
+                JOptionPane.showMessageDialog(null, "El archivo con nombre: " + arch + " no fue encontrado en ningún repositorio", "POPUP: Busqueda de archivo", JOptionPane.INFORMATION_MESSAGE);
             }else{
                 //se verifica cuantos archivos existen
                 for(int i=0;i<array.size();i++){

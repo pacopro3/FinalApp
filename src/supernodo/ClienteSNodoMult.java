@@ -10,11 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.nio.*;
 import java.nio.channels.*;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -24,13 +20,15 @@ public class ClienteSNodoMult extends Thread{
 
     String persona;
     DatagramChannel cl;
-    String SNvivo,SNmuerto;
+    String SNvivo,SNmuerto,Nconexion,Nmuerto;
 
     public ClienteSNodoMult(String persona, DatagramChannel cl){
         this.persona = persona;
         this.cl = cl;
         SNvivo="";
         SNmuerto="";
+        Nconexion="";
+        Nmuerto="";
     }
     
     
@@ -67,7 +65,20 @@ public class ClienteSNodoMult extends Thread{
                                     Thread.sleep(2000);
                                 }
                             }
+                        }else if(msj[1].equals("N")){
+                            if(msj[0].equals("Conexion")){
+                                if(msj[2].equals(persona)){
+                                        setNconexion(msj[3]);
+                                        Thread.sleep(2000);
+                                    }
+                            }else if(msj[0].equals("Cierre")){
+                                if(msj[2].equals(persona)){
+                                        setNmuerto(msj[3]);
+                                        Thread.sleep(2000);
+                                    }
+                            }
                         }
+                                
                         bb.clear();
                     }
                 }
@@ -96,8 +107,21 @@ public class ClienteSNodoMult extends Thread{
     public void setSNvivo(String SNvivo) {
         this.SNvivo = SNvivo;
     }
+
+    public void setNconexion(String Nconexion) {
+        this.Nconexion = Nconexion;
+    }
+
+    public String getNconexion() {
+        return Nconexion;
+    }
+
+    public String getNmuerto() {
+        return Nmuerto;
+    }
+
+    public void setNmuerto(String Nmuerto) {
+        this.Nmuerto = Nmuerto;
+    }
     
-    
-    
-   
 }

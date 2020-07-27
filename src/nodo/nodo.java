@@ -14,12 +14,8 @@ import java.net.StandardProtocolFamily;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  *
@@ -99,7 +95,7 @@ public class nodo {
         rmiclient.setName("ClienteRMI");
         rmiclient.start();
         //notificamos de la nueva conexión de Nodo a Supernodo
-        String conex = "Conexion<>N<>" + id;
+        String conex = "Conexion<>N<>" + id + "<>" + persona;
         System.out.println("Texto: " + conex);
         b = ByteBuffer.wrap(conex.getBytes("UTF-8"),0,conex.length());
         cl.send(b, remote);
@@ -114,7 +110,7 @@ public class nodo {
                 }
                 if(in1.getClose()==true){
                     ByteBuffer be = ByteBuffer.allocate(1024);
-                    String fin = "Cierre<>N<>" + persona;
+                    String fin = "Cierre<>N<>"+ id + "<>" + persona;
                     System.out.println("Texto: " + fin);
                     be = ByteBuffer.wrap(fin.getBytes("UTF-8"),0,fin.length());
                     cl.send(be, remote);

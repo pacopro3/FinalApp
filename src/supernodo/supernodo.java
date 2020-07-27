@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package supernodo;
-import headers.objArchivo;
 import interfaz.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -17,8 +16,6 @@ import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import nodo.ClienteNodoMult;
-
 /**
  *
  * @author Sweet
@@ -34,6 +31,7 @@ public class supernodo {
         p.setVisible(true);
         p.setTitle("Supernodo");
         ArrayList<String> nodos=new ArrayList<>();
+        ArrayList<String> nodosh=new ArrayList<>();
         ArrayList<clientesupernodoRMI> arrayofthreads = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
@@ -95,9 +93,20 @@ public class supernodo {
         boolean f=true;
             do{
                 try {
-                    if(serverRMI.getConexiones()!=ssm.getNumconexiones()){
-                        ssm.setNumconexiones(serverRMI.getConexiones());
+                    
+                    if(csm.getNconexion().length()>0){
+                        String nuevo=csm.getNconexion();
+                        nodosh.add(nuevo);
+                        ssm.setNumconexiones((2-nodosh.size()));
                     }
+                    
+                    if(csm.getNmuerto().length()>0){
+                        String nuevo=csm.getNmuerto();
+                        nodosh.remove(nuevo);
+                        ssm.setNumconexiones((2-nodosh.size()));
+                        isn.removeMasivoN(nuevo);
+                    }
+                    
                     
                     if(csm.getSNvivo().length()>0){
                         String nuevo=csm.getSNvivo();
@@ -108,7 +117,7 @@ public class supernodo {
                             cRMI.MainCliente();
                             cRMI.start();
                             arrayofthreads.add(cRMI);
-                            isn.addNodos(nuevo);
+                            isn.addSupernodos(nuevo);
                         }
                     }
                     
@@ -121,6 +130,8 @@ public class supernodo {
                             cRMI.interrupt();
                             arrayofthreads.remove(hilo);
                             nodos.remove(hilo);
+                            isn.removeSuperNodo(nuevo);
+                            isn.removeMasivoSN(nuevo);
                         }
                     }
                     
@@ -130,10 +141,11 @@ public class supernodo {
                         System.out.println("Texto: " + fin);
                         be = ByteBuffer.wrap(fin.getBytes("UTF-8"),0,fin.length());
                         cl.send(be, remote);
+                        Thread.sleep(2000);
                         be.clear();
                         f=false;
                     }
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

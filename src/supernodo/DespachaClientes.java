@@ -7,13 +7,14 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class DespachaClientes extends Thread {
     Socket socket;
-    int idcliente;
+    int idcliente,pto;
     Archivo stub;
 
-    public DespachaClientes(Socket socket,int idcliente, Archivo stub) {
+    public DespachaClientes(int pto,Socket socket,int idcliente, Archivo stub) {
          this.socket = socket;
          this.idcliente = idcliente;
          this.stub=stub;
+         this.pto=pto;
     }
  
      public void run() {
@@ -29,8 +30,9 @@ public class DespachaClientes extends Thread {
         try {
             System.setProperty("java.rmi.server.codebase",
                               "file:/c:/Temp/" + String.valueOf(idcliente)+"/");
+            //System.setProperty("java.rmi.server.hostname","192.168.1.2");
             // Ligamos el objeto remoto en el registro
-            Registry registry = LocateRegistry.getRegistry(null);
+            Registry registry = LocateRegistry.getRegistry((55000-pto));
             registry.bind(String.valueOf(idcliente), stub);
             registry.rebind(String.valueOf(idcliente), stub);
             String [] comprueba = registry.list();
@@ -40,8 +42,7 @@ public class DespachaClientes extends Thread {
             }
             System.err.println("Conexión a traves del puerto:" + idcliente + " lista...");
         } catch (Exception e){
-            System.err.println("Excepción del servidor: " +
-            e.toString());
+            System.err.println("Excepción del servidor: ");
             e.printStackTrace();
             }
         socket.close();

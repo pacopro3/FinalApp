@@ -55,7 +55,6 @@ public class ClienteNodoMult extends Thread{
                         converted = converted.trim();
                         String msj[] = converted.split("<>");
                         if(msj[1].equals("SN")){
-                            System.err.println("Entra->" + converted);
                             if(msj[0].equals("Vivo")){
                                 int conexiones=Integer.parseInt(msj[3]);
                                 if(conexiones==0){
@@ -87,9 +86,10 @@ public class ClienteNodoMult extends Thread{
     }
     
    public void selectNodo(){
-       Random r =  new Random();
-       int result = r.nextInt(supernodos.size());
-       if(result==supernodos.size())result--;
-       supernodo=supernodos.get(result);
+        Random r =  new Random();
+        int result = r.nextInt(supernodos.size());
+        if(result==supernodos.size())result--;
+        supernodo=supernodos.get(result);
+        System.err.println("Supernodo seleccionado:" + supernodo);
    }
 }

@@ -32,7 +32,6 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
         this.s=s;
         this.pto=pto;
         local = new ArrayList<>();
-        conexiones = 2;
     }
     
     public void setSupernodoRMI(supernodoRMI s){
@@ -75,7 +74,7 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
             try {
                         //puerto default del rmiregistry
                         Registry r;
-                        r=java.rmi.registry.LocateRegistry.createRegistry(1099); 
+                        r=java.rmi.registry.LocateRegistry.createRegistry((55000-pto)); 
                         System.out.println("RMI registro listo.");
                         stub = (Archivo)UnicastRemoteObject.exportObject(s,0);
             } catch (Exception e) {
@@ -89,13 +88,11 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
                             DataInputStream dis;
                             System.out.println("Esperando..."); // Esperando conexión
                             Socket cs = ss.accept();
-                            idcliente = cs.getPort();
                             dis = new DataInputStream(cs.getInputStream());
                             idcliente = dis.readInt();
                             System.out.println("Cliente " + idcliente + " en línea");
-                            DespachaClientes hilo = new DespachaClientes(cs,idcliente,stub);
+                            DespachaClientes hilo = new DespachaClientes(pto,cs,idcliente,stub);
                             hilo.start();
-                            setConexiones(getConexiones()-1);
                         }
             }catch(Exception e){
                 
@@ -137,17 +134,9 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
 
     @Override
     public ArrayList<objArchivo> getLocalArchivo() throws RemoteException, Exception {
-        //damos return del arraylist que tenemos de las variables locales que tenemos 
         return local;
     }
 
-    public int getConexiones() {
-        return conexiones;
-    }
-
-    public void setConexiones(int conexiones) {
-        this.conexiones = conexiones;
-    }
     
     
 
