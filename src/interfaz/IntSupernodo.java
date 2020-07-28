@@ -38,7 +38,7 @@ public class IntSupernodo extends javax.swing.JFrame {
         sorter = new TableRowSorter<>(jTable1.getModel());
         jTable1.setRowSorter(sorter);
         sortKeys = new ArrayList<>();
-        int columnIndexToSort = 1;
+        int columnIndexToSort = 0;
         sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
         sorter.setSortKeys(sortKeys);
         sorter.sort();
@@ -217,7 +217,7 @@ public class IntSupernodo extends javax.swing.JFrame {
     public void addTable(String a,String md5, String sn,String n){
         Object[] objs = {a,md5,sn,n};
         tab.addRow(objs);
-        jTable1.repaint();
+        tab.fireTableDataChanged();
     }
     
     public boolean existTable(String a,String md5, String sn,String n){

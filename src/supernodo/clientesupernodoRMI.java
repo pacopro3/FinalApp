@@ -62,6 +62,7 @@ public class clientesupernodoRMI extends ConexionRMI {
                     for(int i=0;i<array.size();i++){
                         aux=array.get(i);
                         isn.addTable(aux.getName(), aux.getMd5(), aux.getSupernodo(), aux.getNodo());
+                        System.out.println("Longitud:" +  array.size());
                     }
                 Thread.sleep(3000);
             }
