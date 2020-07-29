@@ -14,6 +14,7 @@ import java.net.StandardProtocolFamily;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Enumeration;
 
@@ -86,8 +87,15 @@ public class nodo {
         
         Thread.sleep(4000);
         //se intenta escoger un supernodo
-        cnm.selectNodo();
-        id=cnm.getSupernodo();
+        boolean bool = cnm.selectNodo();
+        if(bool){
+            id=cnm.getSupernodo();
+            in1.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> Se realiza la conexión de forma correcta al supernodo " + id);
+        }else{
+            in1.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> Fallo en la conexión de un supernodo. Se finaliza aplicación");
+            System.exit(-1);
+        }
+        
         System.err.println("ID ID ID:" + id);
         in1.setSupernodo(id);
         clientenodoRMI rmi = new clientenodoRMI("cliente", Integer.parseInt(id), null, in1);

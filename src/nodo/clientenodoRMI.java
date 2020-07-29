@@ -38,8 +38,7 @@ public class clientenodoRMI extends ConexionRMI {
     int id,ptoN,ptoS;
     String directorio,a,b;
     Archivo stub;
-    ArrayList<objArchivo> array, apoyo;
-    objArchivo ap;
+    boolean espera;
     
     public clientenodoRMI(String tipo, int pto, String hhost,IntNodo in) throws IOException {
         super(tipo,pto,hhost);
@@ -52,8 +51,6 @@ public class clientenodoRMI extends ConexionRMI {
     public void MainCliente(){
         DataInputStream dis;
         DataOutputStream dos; 
-       array=new ArrayList<>();
-        apoyo=new ArrayList<>();
 	try {
             dos = new DataOutputStream(cs.getOutputStream());
             dos.writeInt(ptoN);
@@ -111,46 +108,66 @@ public class clientenodoRMI extends ConexionRMI {
     
 
     public void buscarArchivo(String arch) throws IOException{
+            objArchivo ap = new objArchivo();
+            ArrayList<objArchivo> array, apoyo;
+            array = new ArrayList<>();
+            apoyo = new ArrayList<>();
         try {
+            in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> Se realiza la solicitud de busqueda del archivo " + arch);
             String current = new java.io.File( "." ).getCanonicalPath();
             directorio = current + "\\src\\Folders\\" + ptoN + "\\" + arch;
                 File file = new File(directorio);
                 if(file.exists()){
+                    in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> El archivo con nombre: " + arch + " ya se encuentra en nuestro repositorio");
                     JOptionPane.showMessageDialog(null, "El archivo con nombre: " + arch + " ya se encuentra en nuestro repositorio", "POPUP: Busqueda de archivo", JOptionPane.INFORMATION_MESSAGE);
                 }else{
-                    array=stub.buscarArchivo(arch);
+                    array= new ArrayList<>(stub.buscarArchivo(arch));
                     if(array.isEmpty()){
                         //print que no se encontró el archivo
+                        in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> El archivo con nombre: " + arch + " no fue encontrado en ningún repositorio");
                         JOptionPane.showMessageDialog(null, "El archivo con nombre: " + arch + " no fue encontrado en ningún repositorio", "POPUP: Busqueda de archivo", JOptionPane.INFORMATION_MESSAGE);
                     }else{
                         //se verifica cuantos archivos existen
                         for(int i=0;i<array.size();i++){
                             ap=array.get(i);
-                            if(apoyo.size()==0)apoyo.add(ap);
+                            if(apoyo.isEmpty())apoyo.add(ap);
                             for(int j=0;j<apoyo.size();j++){
-                                if(!apoyo.get(j).equals(ap)){
-                                    apoyo.add(ap);
+                                objArchivo aux = apoyo.get(j);
+                                if(!(aux.getMd5().equals(ap.getMd5()))){
+                                    apoyo.add(aux);
                                 }
                             }
                         }
+                        
+                        System.out.print("Tamaño: " + apoyo.size());
 
                         if(!(apoyo.size()==1)){
                             //si no es igual a 1 significa que hay varios archivos con el mismo nombre
                             //Le damos a elegir entre uno
-                            ap=choseOne(apoyo);
+                            in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> Se encuentran varios archivos con el nombre: " + arch + " se da a elegir uno");
+                            //ap=choseOne(apoyo);
                         }else{
                             ap=apoyo.get(0);
                         }
 
                         //generar conexión con el archivo que sea seleccionado
-                        int contador=0;
-                        for(int i=0;i<array.size();i++){
-                            if(array.get(i).equals(ap)){
-                                contador++;
+                        int iss = array.size();
+                        iss-=1;
+                        while(iss>=0){
+                            objArchivo ux = array.get(iss);
+                            if(!(ux.getMd5().equals(ap.getMd5()))){
+                                array.remove(iss);
+                                iss=(array.size()-1);
+                            }else{
+                                iss--;
                             }
                         }
-                        //el contador sirve para saber cuantas conexiones se van a necesitar para pedir la conexión
-                        //ejecuta conexiones simultaneas
+                        int contador=array.size();
+                        in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> El archivo con nombre: " + arch + " fue encontrado " + contador + " veces");
+                        for(int i = 0;i<contador;i++){
+                            //iniciar conexión
+                            System.out.println("Partes: " + i);
+                        }
                     }
                 }
         } catch (Exception ex) {
@@ -158,8 +175,9 @@ public class clientenodoRMI extends ConexionRMI {
         }
     }
     
-    public objArchivo choseOne(ArrayList<objArchivo> ap){
+    public objArchivo choseOne(ArrayList<objArchivo> ap) throws InterruptedException{
     objArchivo a,aux;
+    setEspera(true);
     a=new objArchivo();
     JFrame frame = new JFrame("Seleccion");
     frame.setVisible(true);
@@ -185,7 +203,6 @@ public class clientenodoRMI extends ConexionRMI {
     }
 
     final JComboBox<String> cb = new JComboBox<String>(choices);
-
     cb.setMaximumSize(cb.getPreferredSize());
     cb.setAlignmentX(Component.CENTER_ALIGNMENT);
     panel.add(cb);
@@ -200,11 +217,14 @@ public class clientenodoRMI extends ConexionRMI {
                 setMD5(abc[2]);
                 frame.setVisible(false);
                 frame.dispose();
+                setEspera(false);
             }
     });
-    
     frame.setVisible(true);
-
+    while(getEspera()){
+        Thread.sleep(1000);
+    }
+    
         for(int i=0;i<ap.size();i++){
             aux=ap.get(i);
             if(getMD5().equals(aux.getMd5())){
@@ -220,6 +240,14 @@ public class clientenodoRMI extends ConexionRMI {
 
     public void setMD5(String MD5) {
         this.MD5 = MD5;
+    }
+
+    public void setEspera(boolean espera) {
+        this.espera = espera;
+    }
+    
+    public boolean getEspera(){
+        return espera;
     }
     
     

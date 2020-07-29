@@ -6,12 +6,9 @@
 package interfaz;
 
 import headers.objArchivo;
-import java.awt.List;
 import java.util.ArrayList;
-import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.RowSorter;
-import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -277,6 +274,8 @@ public class IntSupernodo extends javax.swing.JFrame {
     public ArrayList<objArchivo> getTable(String compare){
         ar.clear();
         String col1,col2,col3,col4;
+        int u=0;
+        System.out.println("Se busca:" + compare);
         for(int i=0;i<tab.getRowCount();i++){
             col1=(String) tab.getValueAt(i, 0);
             col2=(String) tab.getValueAt(i, 1);
@@ -286,11 +285,12 @@ public class IntSupernodo extends javax.swing.JFrame {
                 objArchivo aux = new objArchivo(col1, col2, col3, col4);
                 ar.add(aux);
             }else if(compare.equals(col1)){
+                System.err.println("Entra contador" + u++);
                 objArchivo aux = new objArchivo(col1, col2, col3, col4);
                 ar.add(aux);
             }       
         }
-        return new ArrayList<objArchivo>(ar);
+        return ar;
     }
     
     public void addLista(ArrayList<objArchivo> l){

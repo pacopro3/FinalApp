@@ -86,16 +86,17 @@ public class ClienteNodoMult extends Thread{
         this.supernodo = supernodo;
     }
     
-   public void selectNodo(){
+   public boolean selectNodo(){
        try{
         Random r =  new Random();
         int result = r.nextInt(supernodos.size());
         if(result==supernodos.size())result--;
         supernodo=supernodos.get(result);
         System.err.println("Supernodo seleccionado:" + supernodo);
+        return true;
        }catch(Exception e){
                 JOptionPane.showMessageDialog(null, "No se encuentra supernodo disponible. Favor de intentarlo más tarde","POPUP: Error nodo", JOptionPane.INFORMATION_MESSAGE);
-                System.exit(1);
+                return false;
            
        }
    }

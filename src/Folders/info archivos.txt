@@ -1,0 +1,2 @@
+El archivo lyx2.pdf se encuentra repetido en la carpeta 9020 y la 9100
+Sin embargo el contenido es distinto, por lo cual debe ser un MD5 distinto.
