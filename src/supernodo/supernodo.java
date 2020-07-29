@@ -96,14 +96,25 @@ public class supernodo {
                     
                     if(csm.getNconexion().length()>0){
                         String nuevo=csm.getNconexion();
+                        csm.setNconexion("");
+                        System.err.println("Nueva conexión del nodo" + nuevo);
                         nodosh.add(nuevo);
                         ssm.setNumconexiones((2-nodosh.size()));
+                        isn.addNodos(nuevo);
                     }
                     
                     if(csm.getNmuerto().length()>0){
                         String nuevo=csm.getNmuerto();
+                        csm.setNmuerto("");
+                        isn.removeMasivoN(nuevo);
+                        isn.removeNodo(nuevo);
                         nodosh.remove(nuevo);
                         ssm.setNumconexiones((2-nodosh.size()));
+                    }
+                    
+                    if(csm.getNmuerto2().length()>0){
+                        String nuevo=csm.getNmuerto2();
+                        csm.setNmuerto2("");
                         isn.removeMasivoN(nuevo);
                     }
                     
@@ -125,13 +136,13 @@ public class supernodo {
                         String nuevo=csm.getSNmuerto();
                         csm.setSNmuerto("");
                         if(nodos.contains(nuevo)){
+                            isn.removeSuperNodo(nuevo);
+                            isn.removeMasivoSN(nuevo);
                             int hilo=nodos.indexOf(nuevo);
-                            clientesupernodoRMI cRMI = arrayofthreads.get(hilo);
+                            clientesupernodoRMI cRMI =(clientesupernodoRMI) arrayofthreads.get(hilo);
                             cRMI.interrupt();
                             arrayofthreads.remove(hilo);
                             nodos.remove(hilo);
-                            isn.removeSuperNodo(nuevo);
-                            isn.removeMasivoSN(nuevo);
                         }
                     }
                     

@@ -94,10 +94,12 @@ public class clientenodoRMI extends ConexionRMI {
                 if(!(r.isEmpty()))
                     if(stub.Actualizar(r))            
                         in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> Se actualiza la info local en el supernodo");
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             }
         }catch(Exception e){
-            e.printStackTrace();
+            in.setVisible(false);
+            in.dispose();
+            this.interrupt();
         }
         
         

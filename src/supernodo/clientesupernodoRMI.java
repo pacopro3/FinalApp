@@ -37,13 +37,13 @@ public class clientesupernodoRMI extends ConexionRMI {
     public void MainCliente(){
         DataInputStream dis;
         DataOutputStream dos; 
-        array=new ArrayList<>();
 	try {
             dos = new DataOutputStream(cs.getOutputStream());
             dos.writeInt(ptoL);
             Registry registry = LocateRegistry.getRegistry((55000-ptoS));
             Thread.sleep(2000);
             stub = (Archivo)registry.lookup(String.valueOf(ptoL));
+            System.out.println("PtoS:" + ptoS +"\nPtoL:" + ptoL);
         } catch (Exception e) {
             System.err.println("Excepción del cliente: " +
                              e.toString());
@@ -55,7 +55,7 @@ public class clientesupernodoRMI extends ConexionRMI {
     public void run() {
         try{
             while(true){
-                array = stub.getLocalArchivo();
+                array = new ArrayList<>(stub.getLocalArchivo());
                 isn.removeMasivoSN(String.valueOf(ptoS));
                 objArchivo aux = new objArchivo();
                 if(!array.isEmpty())
@@ -63,11 +63,13 @@ public class clientesupernodoRMI extends ConexionRMI {
                         aux=array.get(i);
                         isn.addTable(aux.getName(), aux.getMd5(), aux.getSupernodo(), aux.getNodo());
                         System.out.println("Longitud:" +  array.size());
+                        Thread.sleep(300);
                     }
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             }
         }catch(Exception e){
             System.err.println("Error al conectar con el servidor:" + ptoS+", se cierra la conexión");
+            isn.removeMasivoSN(String.valueOf(ptoS));
             this.interrupt();
         }   
     }   

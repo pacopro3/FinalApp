@@ -38,7 +38,7 @@ public class IntSupernodo extends javax.swing.JFrame {
         sorter = new TableRowSorter<>(jTable1.getModel());
         jTable1.setRowSorter(sorter);
         sortKeys = new ArrayList<>();
-        int columnIndexToSort = 0;
+        int columnIndexToSort = 3;
         sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
         sorter.setSortKeys(sortKeys);
         sorter.sort();
@@ -217,7 +217,6 @@ public class IntSupernodo extends javax.swing.JFrame {
     public void addTable(String a,String md5, String sn,String n){
         Object[] objs = {a,md5,sn,n};
         tab.addRow(objs);
-        tab.fireTableDataChanged();
     }
     
     public boolean existTable(String a,String md5, String sn,String n){
@@ -281,18 +280,28 @@ public class IntSupernodo extends javax.swing.JFrame {
     
     public void removeMasivoSN(String sn) {
         String col3;
-        for(int i=0;i<tab.getRowCount();i++){
-            col3=(String) tab.getValueAt(i, 2);
-            if(col3.equals(sn))
-                tab.removeRow(i);
+        int a = tab.getRowCount();
+        System.err.println("a:" + a);
+        if(a>0){
+            for(int i=a;i>0;--i){
+                col3=(String) tab.getValueAt(i, 2);
+                if(col3.equalsIgnoreCase(sn)){
+                    tab.removeRow(i);
+                }
+            }
         }
     }
     public void removeMasivoN(String n) {
         String col4;
-        for(int i=0;i<tab.getRowCount();i++){
+        int a=tab.getRowCount();
+        System.err.println("a:" + a);
+        if(a>0){
+            for(int i=a;i>0;--i){
             col4=(String) tab.getValueAt(i, 3);
-            if(col4.equals(n))
+            if(col4.equalsIgnoreCase(n)){
                 tab.removeRow(i);
+            }
+        }
         }
     }
     

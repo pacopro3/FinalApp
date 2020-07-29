@@ -20,7 +20,7 @@ public class ClienteSNodoMult extends Thread{
 
     String persona;
     DatagramChannel cl;
-    String SNvivo,SNmuerto,Nconexion,Nmuerto;
+    String SNvivo,SNmuerto,Nconexion,Nmuerto,Nmuerto2;
 
     public ClienteSNodoMult(String persona, DatagramChannel cl){
         this.persona = persona;
@@ -29,6 +29,7 @@ public class ClienteSNodoMult extends Thread{
         SNmuerto="";
         Nconexion="";
         Nmuerto="";
+        Nmuerto2="";
     }
     
     
@@ -75,7 +76,10 @@ public class ClienteSNodoMult extends Thread{
                                 if(msj[2].equals(persona)){
                                         setNmuerto(msj[3]);
                                         Thread.sleep(2000);
-                                    }
+                                    }else{
+                                        setNmuerto2(msj[3]);
+                                        Thread.sleep(2000);
+                                }
                             }
                         }
                                 
@@ -123,5 +127,15 @@ public class ClienteSNodoMult extends Thread{
     public void setNmuerto(String Nmuerto) {
         this.Nmuerto = Nmuerto;
     }
+
+    public void setNmuerto2(String Nmuerto2) {
+        this.Nmuerto2 = Nmuerto2;
+    }
+
+    public String getNmuerto2() {
+        return Nmuerto2;
+    }
+    
+    
     
 }
