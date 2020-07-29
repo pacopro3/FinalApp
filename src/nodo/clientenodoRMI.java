@@ -166,7 +166,19 @@ public class clientenodoRMI extends ConexionRMI {
                         in.LOGS(LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "-> El archivo con nombre: " + arch + " fue encontrado " + contador + " veces");
                         for(int i = 0;i<contador;i++){
                             //iniciar conexión
-                            System.out.println("Partes: " + i);
+                            objArchivo ux = array.get(i);
+                            objPeticion o = new objPeticion();
+                            o.setName(arch);
+                            o.setPartes(contador);
+                            o.setPosicion(i);
+                            o.setDestino(ptoN);
+                            o.setOrigen(Integer.parseInt(ux.getNodo()));
+                            int ptoremoto = Integer.parseInt(ux.getNodo());
+                            ptoremoto=ptoremoto+100;
+                            clientFile cf = new clientFile(o, "localhost",ptoremoto);
+                            Thread th=new Thread(cf);
+                            th.start();
+                            th.join();
                         }
                     }
                 }

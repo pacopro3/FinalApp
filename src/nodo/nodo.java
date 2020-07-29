@@ -103,6 +103,12 @@ public class nodo {
         Thread rmiclient = new Thread(rmi);
         rmiclient.setName("ClienteRMI");
         rmiclient.start();
+        
+        serverFile sf=new serverFile(pto+100);
+        Thread fileserver = new Thread(sf);
+        fileserver.setName("ServidorF");
+        fileserver.start();
+        
         //notificamos de la nueva conexión de Nodo a Supernodo
         String conex = "Conexion<>N<>" + id + "<>" + persona;
         System.out.println("Texto: " + conex);
