@@ -24,6 +24,7 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
     int conexiones;
     supernodoRMI s;
     int pto;
+    int idcliente;
     
     
     public supernodoRMI(String tipo, int pto, IntSupernodo is) throws IOException {
@@ -70,7 +71,6 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
     @Override
     public void run(){
         Archivo stub = null;
-          int idcliente;
             try {
                         //puerto default del rmiregistry
                         Registry r;
@@ -121,8 +121,11 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
             local.clear();
             local.addAll(apoyo);
             apoyo.clear();
+            is.removeMasivoSN(String.valueOf(pto));
+            is.addLista(local);
             return true;
         } catch (Exception e) {
+            System.err.println("aqui sucede la excepcion ");
             return false;
         }
     }
@@ -134,7 +137,7 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
 
     @Override
     public ArrayList<objArchivo> getLocalArchivo() throws RemoteException, Exception {
-        return local;
+        return new ArrayList<objArchivo>(local);
     }
 
     

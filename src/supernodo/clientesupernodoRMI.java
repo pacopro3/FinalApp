@@ -57,19 +57,13 @@ public class clientesupernodoRMI extends ConexionRMI {
             while(true){
                 array = new ArrayList<>(stub.getLocalArchivo());
                 isn.removeMasivoSN(String.valueOf(ptoS));
-                objArchivo aux = new objArchivo();
-                if(!array.isEmpty())
-                    for(int i=0;i<array.size();i++){
-                        aux=array.get(i);
-                        isn.addTable(aux.getName(), aux.getMd5(), aux.getSupernodo(), aux.getNodo());
-                        System.out.println("Longitud:" +  array.size());
-                        Thread.sleep(300);
-                    }
+                isn.addLista(array);
                 Thread.sleep(5000);
             }
         }catch(Exception e){
             System.err.println("Error al conectar con el servidor:" + ptoS+", se cierra la conexión");
             isn.removeMasivoSN(String.valueOf(ptoS));
+            e.printStackTrace();
             this.interrupt();
         }   
     }   

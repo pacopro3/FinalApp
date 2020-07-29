@@ -89,6 +89,7 @@ public class nodo {
         cnm.selectNodo();
         id=cnm.getSupernodo();
         System.err.println("ID ID ID:" + id);
+        in1.setSupernodo(id);
         clientenodoRMI rmi = new clientenodoRMI("cliente", Integer.parseInt(id), null, in1);
         rmi.MainCliente();
         Thread rmiclient = new Thread(rmi);

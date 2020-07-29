@@ -158,7 +158,8 @@ public class supernodo {
                     }
                     Thread.sleep(1000);
                 } catch (Exception ex) {
-                    ex.toString();
+                    System.err.println("Primera excepción");
+                    ex.printStackTrace();
                 }
             }while(f);
         
