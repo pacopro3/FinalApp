@@ -311,8 +311,8 @@ public class IntSupernodo extends javax.swing.JFrame {
     public void removeMasivoSN(String sn) {
         String col2;
         int i = (tab.getRowCount()-1);
-        if(i>0)
-            while(i>0){
+        if(i>=0)
+            while(i>=0){
                 col2=(String) tab.getValueAt(i, 2);
                 if(col2.equals(sn)){
                     tab.removeRow(i);
@@ -320,11 +320,13 @@ public class IntSupernodo extends javax.swing.JFrame {
                 }else i--;
             }
     }
+    
+    
     public void removeMasivoN(String n){
         String col3;
         int i = (tab.getRowCount()-1);
-        if(i>0)
-            while(i>0){
+        if(i>=0)
+            while(i>=0){
                 col3=(String) tab.getValueAt(i, 3);
                 if(col3.equals(n)){
                     tab.removeRow(i);

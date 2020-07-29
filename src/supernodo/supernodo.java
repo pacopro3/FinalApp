@@ -110,6 +110,7 @@ public class supernodo {
                         isn.removeNodo(nuevo);
                         nodosh.remove(nuevo);
                         ssm.setNumconexiones((2-nodosh.size()));
+                        serverRMI.finish(nuevo);
                     }
                     
                     if(csm.getNmuerto2().length()>0){
@@ -152,7 +153,7 @@ public class supernodo {
                         System.out.println("Texto: " + fin);
                         be = ByteBuffer.wrap(fin.getBytes("UTF-8"),0,fin.length());
                         cl.send(be, remote);
-                        Thread.sleep(2000);
+                        Thread.sleep(3000);
                         be.clear();
                         f=false;
                     }
@@ -169,7 +170,7 @@ public class supernodo {
             cliente.interrupt();
             server.interrupt();
             servrmi.interrupt();
-            
+            System.exit(0);
         }catch (Exception e) {
             e.printStackTrace();
             //TODO: handle exception

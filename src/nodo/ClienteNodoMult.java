@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -93,6 +94,8 @@ public class ClienteNodoMult extends Thread{
         supernodo=supernodos.get(result);
         System.err.println("Supernodo seleccionado:" + supernodo);
        }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "No se encuentra supernodo disponible. Favor de intentarlo más tarde","POPUP: Error nodo", JOptionPane.INFORMATION_MESSAGE);
+                System.exit(1);
            
        }
    }

@@ -100,6 +100,8 @@ public class clientenodoRMI extends ConexionRMI {
             in.setVisible(false);
             in.dispose();
             this.interrupt();
+            JOptionPane.showMessageDialog(null, "Se perdió la conexión con el supernodo, la aplicación se cerrará", "POPUP: Error de nodo", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(1);
         }
         
         
@@ -110,40 +112,47 @@ public class clientenodoRMI extends ConexionRMI {
 
     public void buscarArchivo(String arch) throws IOException{
         try {
-            array=stub.buscarArchivo(arch);
-            if(array.isEmpty()){
-                //print que no se encontró el archivo
-                JOptionPane.showMessageDialog(null, "El archivo con nombre: " + arch + " no fue encontrado en ningún repositorio", "POPUP: Busqueda de archivo", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                //se verifica cuantos archivos existen
-                for(int i=0;i<array.size();i++){
-                    ap=array.get(i);
-                    if(apoyo.size()==0)apoyo.add(ap);
-                    for(int j=0;j<apoyo.size();j++){
-                        if(!apoyo.get(j).equals(ap)){
-                            apoyo.add(ap);
-                        }
-                    }
-                }
-                
-                if(!(apoyo.size()==1)){
-                    //si no es igual a 1 significa que hay varios archivos con el mismo nombre
-                    //Le damos a elegir entre uno
-                    ap=choseOne(apoyo);
+            String current = new java.io.File( "." ).getCanonicalPath();
+            directorio = current + "\\src\\Folders\\" + ptoN + "\\" + arch;
+                File file = new File(directorio);
+                if(file.exists()){
+                    JOptionPane.showMessageDialog(null, "El archivo con nombre: " + arch + " ya se encuentra en nuestro repositorio", "POPUP: Busqueda de archivo", JOptionPane.INFORMATION_MESSAGE);
                 }else{
-                    ap=apoyo.get(0);
-                }
-                
-                //generar conexión con el archivo que sea seleccionado
-                int contador=0;
-                for(int i=0;i<array.size();i++){
-                    if(array.get(i).equals(ap)){
-                        contador++;
+                    array=stub.buscarArchivo(arch);
+                    if(array.isEmpty()){
+                        //print que no se encontró el archivo
+                        JOptionPane.showMessageDialog(null, "El archivo con nombre: " + arch + " no fue encontrado en ningún repositorio", "POPUP: Busqueda de archivo", JOptionPane.INFORMATION_MESSAGE);
+                    }else{
+                        //se verifica cuantos archivos existen
+                        for(int i=0;i<array.size();i++){
+                            ap=array.get(i);
+                            if(apoyo.size()==0)apoyo.add(ap);
+                            for(int j=0;j<apoyo.size();j++){
+                                if(!apoyo.get(j).equals(ap)){
+                                    apoyo.add(ap);
+                                }
+                            }
+                        }
+
+                        if(!(apoyo.size()==1)){
+                            //si no es igual a 1 significa que hay varios archivos con el mismo nombre
+                            //Le damos a elegir entre uno
+                            ap=choseOne(apoyo);
+                        }else{
+                            ap=apoyo.get(0);
+                        }
+
+                        //generar conexión con el archivo que sea seleccionado
+                        int contador=0;
+                        for(int i=0;i<array.size();i++){
+                            if(array.get(i).equals(ap)){
+                                contador++;
+                            }
+                        }
+                        //el contador sirve para saber cuantas conexiones se van a necesitar para pedir la conexión
+                        //ejecuta conexiones simultaneas
                     }
                 }
-                //el contador sirve para saber cuantas conexiones se van a necesitar para pedir la conexión
-                //ejecuta conexiones simultaneas
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

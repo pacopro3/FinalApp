@@ -41,6 +41,20 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
     public supernodoRMI getSupernodoRMI(){
         return s;
     }
+    
+    public void finish(String pto){
+        int i=(local.size()-1);
+        objArchivo aux=new objArchivo();
+        while(i>=0){
+            aux=local.get(i);
+            if(aux.getNodo().equals(pto)){
+                local.remove(i);
+                i=(local.size()-1);
+            }else{
+                i--;
+            } 
+        }
+    }
 //    public void MainServidor(supernodoRMI s) throws IOException {
 //          Archivo stub = null;
 //          int idcliente;
@@ -100,6 +114,7 @@ public class supernodoRMI extends ConexionRMI implements Archivo{
                         
                
     }
+    
 
     @Override
     public boolean Actualizar(ArrayList<objArchivo> arreglo) throws RemoteException, Exception {

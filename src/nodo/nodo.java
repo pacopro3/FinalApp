@@ -108,6 +108,7 @@ public class nodo {
                 if(in1.getBandera()==true){
                     System.out.println("Se activa la busqueda");
                     rmi.buscarArchivo(in1.getText());
+                    in1.setBandera(false);
                 }
                 if(in1.getClose()==true){
                     ByteBuffer be = ByteBuffer.allocate(1024);
@@ -115,10 +116,11 @@ public class nodo {
                     System.out.println("Texto: " + fin);
                     be = ByteBuffer.wrap(fin.getBytes("UTF-8"),0,fin.length());
                     cl.send(be, remote);
+                    Thread.sleep(3000);
                     be.clear();
                     f=false;
                 }
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -129,7 +131,7 @@ public class nodo {
             
             cliente.interrupt();
             rmiclient.interrupt();
-            
+            System.exit(0);
         }catch (Exception e) {
             e.printStackTrace();
             //TODO: handle exception
